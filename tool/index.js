@@ -84,7 +84,7 @@ function getAllOldDatabase() {
             }
         }
     }
-    dowloadImage(items, 0, function () {
+    dowloadImage(items, 5400, function () {
         console.log(items.length);
         fs.outputJsonSync(path.join(__dirname, `../database/data_1.json`), items);
         console.log("done");
@@ -384,7 +384,7 @@ async function download(uri, url, callback) {
     });
     indexDownload++
     if (noDownloadList.indexOf(uri) == -1 && !(await fs.pathExists(dirImage + url + filename))) {
-        if (indexDownload % 100 == 0) console.log("dowload", indexDownload, uri);
+        console.log("dowload", indexDownload, uri);
         request.head(uri, function (err, res, body) {
             request(uri)
                 .pipe(fs.createWriteStream(dirImage + url + filename))
