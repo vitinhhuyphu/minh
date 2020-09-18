@@ -90,8 +90,7 @@ function getAllOldDatabase() {
         console.log("done");
     });
 }
-let isDouwload = true;
-let indexDownload = 1;
+let indexDownload = 0;
 getAllOldDatabase();
 
 async function dowloadImage(items, index, callback) {
@@ -384,8 +383,8 @@ async function download(uri, url, callback) {
         recursive: true
     });
     indexDownload++
-    if (noDownloadList.indexOf(uri) == -1 && isDouwload && !(await fs.pathExists(dirImage + url + filename))) {
-        if (indexDownload % 1000 == 0) console.log("dowload", indexDownload, uri);
+    if (noDownloadList.indexOf(uri) == -1 && !(await fs.pathExists(dirImage + url + filename))) {
+        if (indexDownload % 100 == 0) console.log("dowload", indexDownload, uri);
         request.head(uri, function (err, res, body) {
             request(uri)
                 .pipe(fs.createWriteStream(dirImage + url + filename))
@@ -394,7 +393,7 @@ async function download(uri, url, callback) {
                 });
         });
     } else {
-        if (indexDownload % 1000 == 0) console.log(indexDownload, uri);
+        if (indexDownload % 100 == 0) console.log(indexDownload, uri);
         await delay(10);
         callback("/" + url + filename);
     }
