@@ -95,7 +95,7 @@ let indexDownload = 1;
 getAllOldDatabase();
 
 async function dowloadImage(items, index, callback) {
-    if (index % 1000 == 0) console.log("Item thứ:", index)
+    if (index % 100 == 0) console.log("Item thứ:", index)
     if (index >= items.length) {
         callback();
         return;
@@ -384,7 +384,7 @@ async function download(uri, url, callback) {
         recursive: true
     });
     indexDownload++
-    if (noDownloadList.indexOf(uri) > -1 && isDouwload && !(await fs.pathExists(dirImage + url + filename))) {
+    if (noDownloadList.indexOf(uri) == -1 && isDouwload && !(await fs.pathExists(dirImage + url + filename))) {
         if (indexDownload % 1000 == 0) console.log("dowload", indexDownload, uri);
         request.head(uri, function (err, res, body) {
             request(uri)
