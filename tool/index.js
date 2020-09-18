@@ -410,7 +410,7 @@ function getUrlsFromText(str) {
         var element = strs[i].split("'");
         if (element.length > 1 && isImageUrl(element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)) {
             urls.push(element[0].split("?")[0]);
-        } else if (element.length > 1) {
+        } else if (element.length > 1 && element[0].indexOf("youtube") == -1) {
             console.log("not dowload",element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)
         }
     }
@@ -419,7 +419,7 @@ function getUrlsFromText(str) {
         var element = strs[i].split('"');
         if (element.length > 1 && isImageUrl(element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)) {
             urls.push(element[0].split("?")[0]);
-        } else if (element.length > 1) {
+        } else if (element.length > 1 && element[0].indexOf("youtube") == -1) {
             console.log("not dowload",element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)
         }
     }
