@@ -95,7 +95,7 @@ let indexDownload = 1;
 getAllOldDatabase();
 
 async function dowloadImage(items, index, callback) {
-    console.log("Item thứ:",index)
+    if (index % 1000 == 0) console.log("Item thứ:", index)
     if (index >= items.length) {
         callback();
         return;
@@ -385,7 +385,7 @@ async function download(uri, url, callback) {
     });
     indexDownload++
     if (noDownloadList.indexOf(uri) > -1 && isDouwload && !(await fs.pathExists(dirImage + url + filename))) {
-        //console.log("dowload", indexDownload, uri);
+        if (indexDownload % 1000 == 0) console.log("dowload", indexDownload, uri);
         request.head(uri, function (err, res, body) {
             request(uri)
                 .pipe(fs.createWriteStream(dirImage + url + filename))
@@ -394,7 +394,7 @@ async function download(uri, url, callback) {
                 });
         });
     } else {
-        //console.log(indexDownload, uri);
+        if (indexDownload % 1000 == 0) console.log(indexDownload, uri);
         await delay(10);
         callback("/" + url + filename);
     }
@@ -405,13 +405,13 @@ function getUrlsFromText(str) {
     str = str.split(' ').join('')
     let urls = [];
     let strs = str.split("src='");
-    if(str.indexOf("src=`")>-1) console.log(str.indexOf("src=`"))
+    if (str.indexOf("src=`") > -1) console.log(str.indexOf("src=`"))
     for (let i = 1; i < strs.length; i++) {
         var element = strs[i].split("'");
         if (element.length > 1 && isImageUrl(element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)) {
             urls.push(element[0].split("?")[0]);
         } else if (element.length > 1 && element[0].indexOf("youtube") == -1) {
-            console.log("not dowload",element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)
+            console.log("not dowload", element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)
         }
     }
     strs = str.split(`src="`);
@@ -420,7 +420,7 @@ function getUrlsFromText(str) {
         if (element.length > 1 && isImageUrl(element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)) {
             urls.push(element[0].split("?")[0]);
         } else if (element.length > 1 && element[0].indexOf("youtube") == -1) {
-            console.log("not dowload",element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)
+            console.log("not dowload", element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)
         }
     }
     return urls;
