@@ -404,7 +404,16 @@ async function download(uri, url, callback) {
 function getUrlsFromText(str) {
     let urls = [];
     let strs = str.split(' ').join('').split("src='");
-    console.log(str.split(' ').join('').indexOf(`src="`))
+    if(str.split(' ').join('').indexOf("src=`")>-1) console.log(str.split(' ').join('').indexOf("src=`"))
+    for (let i = 1; i < strs.length; i++) {
+        var element = strs[i].split("'");
+        if (element.length > 1 && isImageUrl(element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)) {
+            urls.push(element[0].split("?")[0]);
+        } else if (element.length > 1) {
+            console.log("not dowload",element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)
+        }
+    }
+    strs = str.split(' ').join('').split(`src="`);
     for (let i = 1; i < strs.length; i++) {
         var element = strs[i].split("'");
         if (element.length > 1 && isImageUrl(element[0].indexOf("http") > -1 ? element[0] : `http://admin.huyphu.com${element[0]}`)) {
