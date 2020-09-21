@@ -1,4 +1,5 @@
 const database = require("../lib/database");
+const shortid = require("shortid");
 const fs = require("fs-extra");
 const path = require("path");
 const moment = require("moment");
@@ -53,9 +54,37 @@ function getAllOldDatabase() {
                 items.push(item);
             }
         }
-        // if (item.__Doc == "Address") {
-        //   items.push(item);
-        // }
+        if (item.__Doc == "locations") {
+            let names = item.name.split(" - ")
+            if(names.length>1){
+                if(names.length>2) console.log(item.name)
+                let provinName = names.slice(0,names.length-1).join(' - ')
+                let data = items.find(e=>e.name == provinName)
+                if(!data){
+                    data = {
+                        id:  ("L" + (1001+items.filter(e=>e.__Doc=="Location" && e.parentId == null).length)).replace("L1","L0"),
+                        name: provinName,
+                        __Doc:"Location",
+                        parentId: null
+                    }
+                     console.log(data.id)
+                    items.push(data)
+                }
+                items.push({
+                    id:item.kvId,
+                    name:  names[names.length-1],
+                    __Doc:"Location",
+                    parentId: data.id
+                })
+            }else{
+                items.push({
+                    id:item.kvId,
+                    name:  item.name,
+                    __Doc:"Location",
+                    parentId: item.parentId
+                })
+            }
+        }
         if (item.__Doc == "Article") {
             let d = domain.find((e) => e.id == item.domainId);
             if (d) {
@@ -84,7 +113,8 @@ function getAllOldDatabase() {
             }
         }
     }
-    dowloadImage(items, 5400, function () {
+    //fs.outputJsonSync(path.join(__dirname, `../database/data_1.json`), items);
+    dowloadImage(items.filter(e=>e.__Doc!="Location"), 0, function () {
         console.log(items.length);
         fs.outputJsonSync(path.join(__dirname, `../database/data_1.json`), items);
         console.log("done");
@@ -121,7 +151,7 @@ async function dowloadImage(items, index, callback) {
             dowloadImage(items, index + 1, callback);
         });
     } else {
-        await delay(10)
+        await delay(1)
         dowloadImage(items, index + 1, callback);
     }
 }
@@ -394,7 +424,7 @@ async function download(uri, url, callback) {
         });
     } else {
         if (indexDownload % 100 == 0) console.log(indexDownload, uri);
-        await delay(10);
+        await delay(1);
         callback("/" + url + filename);
     }
 
